@@ -1,10 +1,11 @@
--- core: структура модели, черновик v0 по docs/contract.md.
+-- core: структура модели, v1 по docs/contract.md.
 -- Только таблицы, ключи, ограничения и индексы. Наполнение — model/20_*.sql (B).
 -- Схему core создаёт model/build.sql.
 --
 -- Имена колонок как в raw (кроме опечатки lenght в products), типы — настоящие.
 -- Деньги numeric без typmod: не округлять молча. Время — timestamp без пояса,
--- как в источнике. NULL = «неизвестно»; метка unknown появляется только в mart.
+-- как в источнике. Тексты — как в источнике, без trim. NULL = «неизвестно»;
+-- метка unknown появляется только в mart и ответах.
 
 -- Покупатель-человек. В raw.customers одна строка на заказ (customer_id),
 -- поэтому человек — это customer_unique_id. Адрес хранится в заказе.
@@ -15,7 +16,7 @@ CREATE TABLE core.customers (
 -- Продавец.
 CREATE TABLE core.sellers (
     seller_id              text PRIMARY KEY,
-    seller_zip_code_prefix text,  -- text: ведущие нули значимы
+    seller_zip_code_prefix text,  -- как в источнике: 4–5 цифр, без дополнения нулём
     seller_city            text,
     seller_state           text
 );
@@ -52,7 +53,7 @@ CREATE TABLE core.orders (
     order_delivered_carrier_date  timestamp,
     order_delivered_customer_date timestamp,
     order_estimated_delivery_date date,  -- в источнике всегда 00:00:00
-    customer_zip_code_prefix      text,
+    customer_zip_code_prefix      text,  -- как в источнике, без дополнения нулём
     customer_city                 text,
     customer_state                text
 );
@@ -70,12 +71,13 @@ CREATE TABLE core.order_items (
     PRIMARY KEY (order_id, order_item_id)
 );
 
--- Платёж: относится ко всему заказу, не к позициям.
+-- Платёж: относится ко всему заказу, не к позициям. Платёж у заказа
+-- необязателен (в снимке один delivered-заказ без платежа).
 CREATE TABLE core.order_payments (
     order_id             text    NOT NULL REFERENCES core.orders,
     payment_sequential   integer NOT NULL,
-    payment_type         text    NOT NULL,
-    payment_installments integer,
+    payment_type         text    NOT NULL,  -- включая not_defined, как в источнике
+    payment_installments integer CHECK (payment_installments >= 0),  -- 0 не меняем на 1
     payment_value        numeric NOT NULL CHECK (payment_value >= 0),
     PRIMARY KEY (order_id, payment_sequential)
 );
@@ -85,7 +87,7 @@ CREATE TABLE core.order_reviews (
     review_id               text     NOT NULL,
     order_id                text     NOT NULL REFERENCES core.orders,
     review_score            smallint NOT NULL CHECK (review_score BETWEEN 1 AND 5),
-    review_comment_title    text,
+    review_comment_title    text,  -- текст байт в байт, пробелы по краям значимы
     review_comment_message  text,
     review_creation_date    timestamp,
     review_answer_timestamp timestamp,
@@ -105,8 +107,8 @@ CREATE TABLE core.calendar (
 CREATE TABLE core.etl_rejects (
     source_table text  NOT NULL,  -- имя таблицы в raw без схемы
     source_key   text,            -- ключ строки в источнике, если есть
-    reason       text  NOT NULL,  -- код: duplicate_key, bad_type, orphan_fk, ...
-    payload      jsonb NOT NULL   -- исходная строка целиком
+    reason       text  NOT NULL,  -- код из docs/contract.md: bad_type:<колонка>, orphan:<таблица>, ...
+    payload      jsonb NOT NULL   -- исходная строка целиком: to_jsonb(r)
 );
 
 CREATE INDEX ON core.orders (customer_unique_id);
