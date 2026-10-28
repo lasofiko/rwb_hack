@@ -17,6 +17,9 @@ services:
       - ./scripts/init:/docker-entrypoint-initdb.d:ro
       # сюда кладём CSV с исходными данными: внутри контейнера это /data
       - ./data:/data:ro
+      # репозиторий целиком: build.sh и check.sh запускают psql внутри
+      # контейнера, и \ir в model/build.sql должен видеть файлы модели
+      - .:/work:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U hack -d marketplace"]
       interval: 5s
