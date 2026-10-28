@@ -1,4 +1,4 @@
--- core: структура модели, v1 по docs/contract.md.
+-- core: структура модели, v1 (README.md, раздел «Модель»).
 -- Только таблицы, ключи, ограничения и индексы. Наполнение — model/20_*.sql (B).
 -- Схему core создаёт model/build.sql.
 --
@@ -107,7 +107,7 @@ CREATE TABLE core.calendar (
 CREATE TABLE core.etl_rejects (
     source_table text  NOT NULL,  -- имя таблицы в raw без схемы
     source_key   text,            -- ключ строки в источнике, если есть
-    reason       text  NOT NULL,  -- код из docs/contract.md: bad_type:<колонка>, orphan:<таблица>, ...
+    reason       text  NOT NULL,  -- код из README.md («Плохие строки»): bad_type:<колонка>, orphan:<таблица>, ...
     payload      jsonb NOT NULL   -- исходная строка целиком: to_jsonb(r)
 );
 

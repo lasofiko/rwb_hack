@@ -1,6 +1,6 @@
 \set ON_ERROR_STOP on
 \ir ../lib/assertions.sql
--- Ожидания фиксированного снимка из docs/contract.md v1, не будущих загрузок.
+-- Ожидания фиксированного снимка из контракта v1 (README.md, «Модель»), не будущих загрузок.
 -- Запускать отдельно вместе с 01_raw_baseline.sql; runner не включает baseline.
 DO $$
 DECLARE spec record; actual bigint;

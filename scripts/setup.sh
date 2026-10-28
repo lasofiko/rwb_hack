@@ -148,8 +148,7 @@ echo
 echo " Подключение:  postgresql://hack:hack@localhost:$PORT/marketplace"
 echo " Схемы:        raw (данные), core (ваша модель), mart (витрины)"
 echo
-echo " Задание и описание данных:  docs/handout.md"
-echo " Вопросы к модели:           docs/tasks.md"
+echo " Задание, модель и ответы:   README.md"
 echo
 echo " Веб-клиент, если нужен:  $DC --profile tools up -d"
 echo "                          потом http://localhost:8080"

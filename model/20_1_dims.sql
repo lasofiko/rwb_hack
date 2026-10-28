@@ -1,4 +1,4 @@
--- B: raw -> core, docs/contract.md v1 / model/10_ddl.sql.
+-- B: raw -> core, контракт v1 (README.md, «Модель») / model/10_ddl.sql.
 -- Run once into empty core inside the transaction owned by model/build.sql.
 -- No BEGIN/COMMIT, no raw writes. Reject all conflicting keys, never choose a winner.
 SET LOCAL datestyle = 'ISO, YMD';
