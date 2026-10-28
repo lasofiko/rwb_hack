@@ -1,7 +1,7 @@
 \set ON_ERROR_STOP on
 \ir lib/assertions.sql
 
--- Контракт v0 PR #4. etl_rejects намеренно не имеет PK.
+-- Контракт v1. etl_rejects намеренно не имеет PK.
 DO $$
 DECLARE spec record; bad bigint; keys_sql text; null_sql text;
 BEGIN
@@ -39,6 +39,10 @@ BEGIN
     END LOOP;
 END;
 $$;
+
+SELECT pg_temp.assert_true('payment installments preserve zero but reject negative values', NOT EXISTS (
+    SELECT 1 FROM core.order_payments WHERE payment_installments < 0
+));
 
 -- Проверять типы явно: изменения DDL не должны молча ограничить scale или добавить timezone.
 DO $$

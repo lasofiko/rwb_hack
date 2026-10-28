@@ -8,6 +8,15 @@ SELECT pg_temp.assert_true('reject source and reason are known and nonempty', NO
        OR nullif(btrim(reason), '') IS NULL OR payload IS NULL OR jsonb_typeof(payload) <> 'object'
 ));
 
+-- Несколько причин допустимы в одной строке через ';', каждая — из словаря v1.
+SELECT pg_temp.assert_true('reject reasons follow v1 dictionary', NOT EXISTS (
+    SELECT 1 FROM core.etl_rejects r
+    CROSS JOIN LATERAL regexp_split_to_table(r.reason, ';') AS reason(code)
+    WHERE code <> 'duplicate_key'
+      AND code !~ '^(null_key|bad_type|null_required|invalid_value):[a-z_][a-z0-9_]*$'
+      AND code NOT IN ('orphan:customers', 'orphan:orders', 'orphan:products', 'orphan:sellers', 'orphan:categories')
+));
+
 DO $$
 DECLARE source_name text; bad bigint;
 BEGIN

@@ -2,11 +2,13 @@
 \ir lib/assertions.sql
 
 -- Верхняя граница по всем датам, включая обещанную доставку:
--- подтверждено пользователем 2026-10-28. Нижняя — месяц первого оформления.
+-- подтверждено пользователем 2026-10-28. Нижняя — месяц первой даты orders по v1.
 DO $$
 DECLARE first_day date; last_day date; missing_days bigint; extra_days bigint;
 BEGIN
-    SELECT date_trunc('month', min(order_purchase_timestamp))::date,
+    SELECT date_trunc('month', least(min(order_purchase_timestamp), min(order_approved_at),
+            min(order_delivered_carrier_date), min(order_delivered_customer_date),
+            min(order_estimated_delivery_date)::timestamp))::date,
         (date_trunc('month', greatest(max(order_purchase_timestamp), max(order_approved_at),
             max(order_delivered_carrier_date), max(order_delivered_customer_date),
             max(order_estimated_delivery_date)::timestamp)) + interval '1 month' - interval '1 day')::date

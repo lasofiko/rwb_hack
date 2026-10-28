@@ -114,17 +114,17 @@ SELECT pg_temp.assert_numeric('missing translation retained separately',
 
 CREATE TEMP TABLE d_months ON COMMIT DROP AS
 WITH axis AS (
-    SELECT generate_series(timestamp '2017-01-01', timestamp '2017-03-01', interval '1 month') month
+    SELECT generate_series(timestamp '2017-01-01', timestamp '2017-03-01', interval '1 month') AS month_start
 ), facts AS (
-    SELECT date_trunc('month', purchased_at) month, count(*) order_count
+    SELECT date_trunc('month', purchased_at) AS month_start, count(*) order_count
     FROM d_orders GROUP BY 1
 )
-SELECT a.month, coalesce(f.order_count, 0) order_count
-FROM axis a LEFT JOIN facts f USING (month);
+SELECT a.month_start, coalesce(f.order_count, 0) order_count
+FROM axis a LEFT JOIN facts f USING (month_start);
 SELECT pg_temp.assert_numeric('calendar retains all months',
     (SELECT count(*)::numeric FROM d_months), 3);
 SELECT pg_temp.assert_numeric('empty February retained',
-    (SELECT order_count::numeric FROM d_months WHERE month = timestamp '2017-02-01'), 0);
+    (SELECT order_count::numeric FROM d_months WHERE month_start = timestamp '2017-02-01'), 0);
 
 SELECT pg_temp.assert_numeric('unique customers use stable id',
     (SELECT count(DISTINCT customer_unique_id)::numeric FROM d_orders), 2);
