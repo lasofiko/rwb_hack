@@ -1,6 +1,6 @@
 \set ON_ERROR_STOP on
 -- Сравнение повторных сборок, не доказательство правильности формул.
-BEGIN ISOLATION LEVEL REPEATABLE READ;
+-- Транзакцией управляет вызывающий psql; использовать REPEATABLE READ (см. README).
 CREATE TEMP TABLE d_snapshot_exclusions (
     schema_name text, relation_name text, column_names text[] NOT NULL,
     PRIMARY KEY (schema_name, relation_name), CHECK (schema_name IN ('core', 'mart'))
@@ -28,4 +28,3 @@ CROSS JOIN LATERAL pg_temp.d_fingerprint(
 WHERE n.nspname IN ('raw', 'core', 'mart') AND c.relkind IN ('r', 'p', 'v', 'm')
   AND NOT c.relispartition
 ORDER BY 1, 2;
-ROLLBACK;

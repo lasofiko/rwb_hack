@@ -1,4 +1,4 @@
--- Подключать через \ir внутри транзакции. Создаёт только временные объекты.
+-- Подключать через \ir внутри транзакции check.sh. Не запускать отдельной проверкой.
 CREATE TEMP TABLE IF NOT EXISTS d_check_session (unused boolean) ON COMMIT DROP;
 
 CREATE OR REPLACE FUNCTION pg_temp.assert_true(label text, actual boolean)

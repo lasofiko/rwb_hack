@@ -1,7 +1,7 @@
 # Концепция дашборда
 
-Статус: проект D. Интерфейс не требуется. Имена физических таблиц/полей появятся
-из контракта A. Ниже учтено предложение C v0 из `docs/metrics.md` (`95f78db`);
+Статус: проект D по контракту v0 A из PR #4. Интерфейс не требуется.
+Ниже учтено предложение C v0 из `docs/metrics.md` (`95f78db`);
 оно ещё не проверено на данных и не заменяет контракт.
 
 Пользователь — руководитель маркетплейса. Решения: где меняется объём продаж,
@@ -11,12 +11,12 @@
 
 | Блок / решение | Формула для согласования с C | Зерно / нужные поля контракта |
 |---|---|---|
-| Динамика / найти спад | sum(price) позиций delivered; freight_value отдельно; период Q1: [2016-09-01, 2018-09-01) | Календарь month; заказ order_id, order_purchase_timestamp, order_status; позиция order_id, price, freight_value |
-| Продавцы / вклад | Сумма стоимости только позиций продавца; доля = сумма продавца / сумма всех в явно указанном срезе | Позиция order_id + order_item_id, seller_id, price; продавец seller_id |
-| Категории / ассортимент | Сумма позиций по категории, включая unknown; доставка отдельно | Позиция product_id, price; продукт product_id, category; перевод category, label/status |
-| Средний чек / размер покупки | avg(заказной sum(price + freight_value)), delivered; неполные заказы требуют решения | Предагрегированный заказ order_id, сумма, статус и дата; платежи отдельным фактом |
-| Повторные / удержание | 100 × покупатели с ≥2 разными заказами / покупатели с ≥1 заказом; C предлагает всю историю и все статусы | Заказ order_id, customer_id; связка customer_id → customer_unique_id |
-| Качество / доверие | Изолированные строки по источнику/причине; unknown; заказы без нужной даты/цены | Lineage, карантин, counts; окончательный интерфейс A/B |
+| Динамика / найти спад | sum(price) позиций delivered; freight_value отдельно; период Q1: [2016-09-01, 2018-09-01) | core.calendar(day, month_start); core.orders(order_id, order_purchase_timestamp, order_status); core.order_items(order_id, price, freight_value) |
+| Продавцы / вклад | Сумма стоимости только позиций продавца; доля = сумма продавца / сумма всех в явно указанном срезе | core.order_items: (order_id, order_item_id), seller_id, price; core.sellers(seller_id, seller_city, seller_state) |
+| Категории / ассортимент | Сумма позиций по категории, включая unknown; доставка отдельно | core.order_items(product_id, price); core.products(product_id, product_category_name); core.categories(product_category_name, product_category_name_english) |
+| Средний чек / размер покупки | avg(заказной sum(price + freight_value)), delivered; неполные заказы требуют решения | core.order_items агрегируется до order_id, затем core.orders; core.order_payments — отдельная сверка |
+| Повторные / удержание | 100 × покупатели с ≥2 разными заказами / покупатели с ≥1 заказом; C предлагает всю историю и все статусы | core.orders(order_id, customer_unique_id); core.customers(customer_unique_id); адрес core.orders.customer_state |
+| Качество / доверие | Изолированные строки по источнику/причине; unknown; заказы без нужной даты/цены | core.etl_rejects(source_table, source_key, reason, payload); core.products; core.orders; counts |
 
 Период фильтруется по согласованной дате заказа, не по дате загрузки.
 Месяцы без фактов показываются через календарь с 0 заказов. Отсутствие цены

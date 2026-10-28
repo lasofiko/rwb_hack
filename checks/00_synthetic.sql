@@ -1,6 +1,6 @@
 \set ON_ERROR_STOP on
-BEGIN;
-\ir assertions.sql
+-- Транзакцией управляет check.sh. Без собственных BEGIN/COMMIT/ROLLBACK.
+\ir lib/assertions.sql
 
 -- Фикстуры изолированы от raw/core/mart и откатываются целиком.
 CREATE TEMP TABLE d_orders (
@@ -137,6 +137,25 @@ SELECT pg_temp.assert_numeric('distinct customers are not additive by state',
     (SELECT sum(n) FROM (SELECT state, count(DISTINCT customer_unique_id) n
                         FROM d_orders GROUP BY state) x), 3);
 
+-- Карантин: две полностью одинаковые исходные копии, одна отклонена.
+CREATE TEMP TABLE d_source_copies (
+    id text, _source_file text, _loaded_at timestamptz
+) ON COMMIT DROP;
+INSERT INTO d_source_copies VALUES
+    ('same', 'fixture.csv', '2020-01-01 00:00:00+00'),
+    ('same', 'fixture.csv', '2020-01-01 00:00:00+00'),
+    ('other', 'fixture.csv', '2020-01-01 00:00:00+00');
+CREATE TEMP TABLE d_rejected_copies (payload jsonb) ON COMMIT DROP;
+INSERT INTO d_rejected_copies SELECT to_jsonb(r) FROM d_source_copies r WHERE id = 'same' LIMIT 1;
+CREATE TEMP VIEW d_remaining_copies AS
+SELECT * FROM d_source_copies
+EXCEPT ALL
+SELECT (jsonb_populate_record(NULL::pg_temp.d_source_copies, payload)).* FROM d_rejected_copies;
+SELECT pg_temp.assert_numeric('quarantine subtracts one copy, not every duplicate',
+    (SELECT count(*)::numeric FROM d_remaining_copies), 2);
+SELECT pg_temp.assert_numeric('one identical source copy remains',
+    (SELECT count(*)::numeric FROM d_remaining_copies WHERE id = 'same'), 1);
+
 -- Проверка самого assert: FALSE и NULL обязаны вызывать исключение.
 DO $$
 DECLARE caught boolean;
@@ -161,5 +180,4 @@ BEGIN
     IF NOT caught THEN RAISE EXCEPTION 'assert_numeric accepted mismatch'; END IF;
 END;
 $$;
-ROLLBACK;
 \echo 'PASS: synthetic scenarios only; actual model not tested'

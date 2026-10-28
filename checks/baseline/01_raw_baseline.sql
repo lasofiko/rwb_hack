@@ -3,8 +3,8 @@
 -- DDL: PR #2, commit 9303929a0ba45c24118dc9f026470c325a6b3e68.
 -- Объёмы: docs/handout.md раздатки 3da32d149bfa14dca3fdb0c5863d0771c38efbfc.
 -- Не профилирует ключи/NULL/сирот: это работа B. Объекты raw не изменяются.
-BEGIN ISOLATION LEVEL REPEATABLE READ;
-\ir assertions.sql
+-- Транзакцией управляет вызывающий psql, не check.sh (см. README).
+\ir ../lib/assertions.sql
 
 CREATE TEMP TABLE d_raw_expected (
     table_name text PRIMARY KEY, expected_rows bigint NOT NULL,
@@ -85,5 +85,4 @@ $$;
 SELECT pg_temp.assert_numeric('fixed delivery total rows',
     (SELECT sum(row_count) FROM d_raw_observed), 550759);
 SELECT * FROM d_raw_observed ORDER BY table_name;
-ROLLBACK;
 \echo 'PASS: fixed raw delivery only; core/mart correctness not tested'
