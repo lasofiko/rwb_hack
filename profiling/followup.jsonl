@@ -1,0 +1,13 @@
+{"facts": {"database": "marketplace_b", "postgresql": "PostgreSQL 16.15 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit", "profiled_at": "2026-10-28T07:44:29.729133+00:00", "handout_commit": "3da32d149bfa14dca3fdb0c5863d0771c38efbfc"}, "section": "runtime"}
+{"items": 1603, "section": "missing_translation", "category": null, "products": 610, "item_price": 179535.28}
+{"items": 9, "section": "missing_translation", "category": "pc_gamer", "products": 3, "item_price": 1545.95}
+{"items": 15, "section": "missing_translation", "category": "portateis_cozinha_e_preparadores_de_alimentos", "products": 10, "item_price": 3968.53}
+{"section": "typed_key_collision", "item_groups": 0, "payment_groups": 0}
+{"section": "payment_domain", "fractional_cents": 0, "zero_installments": 2}
+{"source": "customer", "section": "zip", "length_max": 5, "length_min": 4, "non_digit_or_bad_length": 0}
+{"source": "seller", "section": "zip", "length_max": 5, "length_min": 4, "non_digit_or_bad_length": 0}
+{"rows": 2, "orders": 2, "section": "duplicate_review_example", "review_id": "00130cbe1f9d422698c812ed8ded1919"}
+{"rows": 2, "orders": 2, "section": "duplicate_review_example", "review_id": "0115633a9c298b6a98bcbe4eee75345f"}
+{"rows": 2, "orders": 2, "section": "duplicate_review_example", "review_id": "0174caf0ee5964646040cd94e15ac95e"}
+{"rows": 2, "orders": 2, "section": "duplicate_review_example", "review_id": "017808d29fd1f942d97e50184dfb4c13"}
+{"rows": 2, "orders": 2, "section": "duplicate_review_example", "review_id": "0254bd905dc677a6078990aad3331a36"}
