@@ -35,10 +35,16 @@ CREATE SCHEMA mart;
 \echo '    10 ddl'
 \ir 10_ddl.sql
 
--- 20: загрузка core из raw (B). Один файл, внутри родители раньше детей,
--- в конце собственная проверка баланса raw = core + rejects.
-\echo '    20 load core'
-\ir 20_load_core.sql
+-- 20: загрузка core из raw (B), порядок из docs/contract.md: родители раньше детей.
+-- 20_4 в конце сверяет баланс raw = core + rejects и падает, если не сходится.
+\echo '    20_1 dims'
+\ir 20_1_dims.sql
+\echo '    20_2 orders'
+\ir 20_2_orders.sql
+\echo '    20_3 order children'
+\ir 20_3_order_children.sql
+\echo '    20_4 calendar + balance'
+\ir 20_4_calendar.sql
 
 -- 30: витрины mart (C).
 -- \ir ../mart/....sql
