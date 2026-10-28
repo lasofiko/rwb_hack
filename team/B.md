@@ -1,9 +1,9 @@
-﻿Задача: B — ETL raw→core по контракту A v0; профиль уже в main через PR #6.
-Статус: model/20_load_core.sql реализован и проверен; ветка b/core-etl, коммит с этим файлом — передача A.
-A: добавить \ir 20_load_core.sql после \ir 10_ddl.sql и до mart в model/build.sql; утвердить контракт v1.
-Проверка: два прогона PostgreSQL 16.15 совпали по всем core-подписям; raw неизменён, деньги сохранены, rejects=0.
+﻿Задача: B — профиль 8 raw и загрузка по контракту v1 A (PR #8).
+Статус: готово; ветка b/etl-v1, коммит с этим файлом — передача A.
+A: подключить model/20_1_dims.sql → 20_2_orders.sql → 20_3_order_children.sql → 20_4_calendar.sql после DDL до mart.
+Исправлено под v1: текст без trim (включая пробельные отзывы), reason-коды, source_key через |, CHECK рассрочки, границы календаря.
+Проверка: два прогона совпали по всем 10 core-подписям; все числа v1 совпали, rejects=0; raw/деньги/тексты сохранены.
 Результат: orders 99441, people 96096, items 112650, payments 103886, reviews 99224, products 32951, sellers 3095.
-Categories 73; calendar 821 день (2016-09-01—2018-11-30); сохранены 610 NULL категорий и 2 категории без перевода.
-Fixture: 32 rejects, плохие типы/дубли/FK/домены, текст/NULL/нулевые суммы, адреса/календарь/хронология — PASS.
-Файлы: docs/data-quality.md, profiling/etl-{verification,fixture}.jsonl, profiling/contract-facts.jsonl; инструкции в profiling/README.md.
-Следующий шаг: PR B → A подключает файл и фиксирует v1 → C выполняет запросы → D независимо проверяет сборку.
+Categories 73 (2 без перевода), NULL category 610; calendar 821 день/27 месяцев, 2016-09-01—2018-11-30.
+Fixture: 35 rejects, все коды v1, плохие типы/дубли/FK/домены, точный текст/ключи/нули/адреса/календарь — PASS.
+Доказательства: profiling/etl-{verification,fixture}.jsonl; подключение сборки — A, независимые checks — D, ответы — C.
