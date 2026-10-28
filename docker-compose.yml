@@ -1,7 +1,8 @@
 services:
   postgres:
+    # без container_name: у каждой копии репозитория (worktree, другая папка)
+    # свой контейнер и свой volume, имена не конфликтуют
     image: postgres:16-alpine
-    container_name: hack_postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: hack
@@ -10,7 +11,9 @@ services:
       # ускоряет инициализацию, для учебной базы безопасно
       POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
     ports:
-      - "5432:5432"
+      # порт на хосте: PG_PORT из окружения или .env, по умолчанию 5432;
+      # второй копии репозитория нужен свой, например PG_PORT=5433
+      - "${PG_PORT:-5432}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       # SQL-скрипты отсюда выполняются один раз при первом старте
@@ -33,7 +36,6 @@ services:
   pgadmin:
     profiles: ["tools"]
     image: dpage/pgadmin4:8
-    container_name: hack_pgadmin
     restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: hack@local.dev
@@ -41,7 +43,7 @@ services:
       PGADMIN_CONFIG_SERVER_MODE: "False"
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
     ports:
-      - "8080:80"
+      - "${PGADMIN_PORT:-8080}:80"
     depends_on:
       postgres:
         condition: service_healthy
