@@ -26,10 +26,13 @@ INSERT INTO d_items VALUES
 
 CREATE TEMP TABLE d_payments (
     order_id text REFERENCES d_orders, payment_sequential integer,
-    amount numeric NOT NULL, PRIMARY KEY (order_id, payment_sequential)
+    amount numeric NOT NULL, payment_installments integer NOT NULL DEFAULT 1,
+    PRIMARY KEY (order_id, payment_sequential)
 ) ON COMMIT DROP;
-INSERT INTO d_payments VALUES
+INSERT INTO d_payments (order_id, payment_sequential, amount) VALUES
     ('o1', 1, 15.00), ('o1', 2, 18.30), ('o2', 1, 5.05);
+UPDATE d_payments SET payment_installments = 3
+WHERE order_id = 'o1' AND payment_sequential = 1;
 
 -- review_id намеренно повторяется; один заказ имеет несколько отзывов.
 CREATE TEMP TABLE d_reviews (
@@ -67,6 +70,10 @@ SELECT pg_temp.assert_numeric('item amount survives joins',
     (SELECT sum(revenue) FROM d_order_fact), (SELECT sum(price) FROM d_items));
 SELECT pg_temp.assert_numeric('payments survive joins',
     (SELECT sum(payment_total) FROM d_order_fact), (SELECT sum(amount) FROM d_payments));
+SELECT pg_temp.assert_numeric('installments do not multiply payment value',
+    (SELECT sum(payment_total) FROM d_order_fact), 38.35);
+SELECT pg_temp.assert_numeric('fixture exposes wrong installment multiplication',
+    (SELECT sum(amount * payment_installments) FROM d_payments), 68.35);
 SELECT pg_temp.assert_true('multiple payments and reviews retained',
     (SELECT payment_count = 2 AND review_count = 2 FROM d_order_fact WHERE order_id = 'o1'));
 SELECT pg_temp.assert_true('missing payment and price remain NULL',
@@ -77,6 +84,16 @@ SELECT pg_temp.assert_numeric('repeated review id retained',
 
 SELECT pg_temp.assert_numeric('seller owns only own item prices',
     (SELECT sum(price) FROM d_items WHERE seller_id = 's1'), 15.15);
+
+-- Для двух явно выбранных полных заказов: чек включает доставку.
+-- Неполный o3 остаётся в d_order_fact; политика реальной метрики здесь не задаётся.
+SELECT pg_temp.assert_numeric('average check uses order grain',
+    (SELECT round(avg(order_total), 2) FROM (
+        SELECT order_id, sum(price + freight) order_total FROM d_items
+        WHERE order_id IN ('o1', 'o2') GROUP BY order_id
+    ) order_totals), 19.18);
+SELECT pg_temp.assert_numeric('fixture exposes wrong item-grain average',
+    (SELECT round(avg(price + freight), 2) FROM d_items WHERE order_id IN ('o1', 'o2')), 12.78);
 
 -- Неизвестная категория и отсутствие перевода не должны удалять позиции.
 CREATE TEMP TABLE d_translations (category text PRIMARY KEY, english text) ON COMMIT DROP;
