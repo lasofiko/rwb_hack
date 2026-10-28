@@ -1,0 +1,11 @@
+{"md5": "5294034acf63585eddc9e66879eec3f9", "rows": 821, "table": "calendar", "section": "core_signature"}
+{"md5": "f500200d25a3fa162de8678b156cabb5", "rows": 73, "table": "categories", "section": "core_signature"}
+{"md5": "b840269fc333294f84bf59d89acf81ea", "rows": 96096, "table": "customers", "section": "core_signature"}
+{"md5": "d41d8cd98f00b204e9800998ecf8427e", "rows": 0, "table": "etl_rejects", "section": "core_signature"}
+{"md5": "a2b8c509bb33ef60c8b50f9f0aa5f6fb", "rows": 112650, "table": "order_items", "section": "core_signature"}
+{"md5": "2c4a259e95e8bf3e31013fc4beae4149", "rows": 103886, "table": "order_payments", "section": "core_signature"}
+{"md5": "7c908c1bb7028b5c867c386d13390e05", "rows": 99224, "table": "order_reviews", "section": "core_signature"}
+{"md5": "7871c70f3b6270dfb61f3d4c4c7e2535", "rows": 99441, "table": "orders", "section": "core_signature"}
+{"md5": "25902605af5cc8ced4812d14319369fc", "rows": 32951, "table": "products", "section": "core_signature"}
+{"md5": "3e8656c21dc22e3a456aefc11ca8e92f", "rows": 3095, "table": "sellers", "section": "core_signature"}
+{"rejects": 0, "section": "etl_acceptance", "calendar_max": "2018-11-30", "calendar_min": "2016-09-01", "raw_unchanged": true, "money_conserved": true}

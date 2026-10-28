@@ -1,0 +1,4 @@
+{"section": "item_quantity", "max_units": 20, "excess_units": 10225, "rows_in_repeated_groups": 17313, "repeated_order_product_seller_groups": 7088}
+{"source": "customers", "section": "city_format", "padded_rows": 0, "distinct_names": 4119, "non_lowercase_rows": 0, "distinct_lower_trim_names": 4119}
+{"source": "sellers", "section": "city_format", "padded_rows": 0, "distinct_names": 611, "non_lowercase_rows": 0, "distinct_lower_trim_names": 611}
+{"section": "estimated_delivery", "non_midnight_rows": 0}

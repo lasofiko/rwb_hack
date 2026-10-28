@@ -1,9 +1,9 @@
-﻿Задача: B — профиль raw и ETL по контракту; повторно проверить и обновить rwb_hack.
-Статус: профиль 853b042 готов; уточнение сумм выполнено; ETL ожидает контракт/DDL A.
-Ветка: b/raw-profile-etl; текущий коммит с этим файлом — передача A без push.
-Повторная проверка: origin/main=95f78db (метрики C v0), origin/a/base=9303929; контракта/DDL нет.
-Файлы A/C/D: docs/data-quality.md, profiling/{01_raw_profile,02_followup,03_reconciliation}.sql + JSONL/SHA-256.
-Проверка: 8 таблиц, 550759 строк; профиль 138 агрегатов; точечная сверка 14 JSON-записей, полный профиль не повторялся.
-Факты A: review_id не PK; 610 NULL категорий, 13 товаров без перевода; все delivered имеют позиции, 1 без платежа.
-Суммы C/D: payment−items−freight = −1819.51 + 162591.95 − 143.46 = 160628.98; см. reconciliation.jsonl.
-Следующий шаг A: docs/contract.md + model/10_ddl.sql; затем B пишет model/20_*.sql и проверяет raw→core.
+﻿Задача: B — ETL raw→core по контракту A v0; профиль уже в main через PR #6.
+Статус: model/20_load_core.sql реализован и проверен; ветка b/core-etl, коммит с этим файлом — передача A.
+A: добавить \ir 20_load_core.sql после \ir 10_ddl.sql и до mart в model/build.sql; утвердить контракт v1.
+Проверка: два прогона PostgreSQL 16.15 совпали по всем core-подписям; raw неизменён, деньги сохранены, rejects=0.
+Результат: orders 99441, people 96096, items 112650, payments 103886, reviews 99224, products 32951, sellers 3095.
+Categories 73; calendar 821 день (2016-09-01—2018-11-30); сохранены 610 NULL категорий и 2 категории без перевода.
+Fixture: 32 rejects, плохие типы/дубли/FK/домены, текст/NULL/нулевые суммы, адреса/календарь/хронология — PASS.
+Файлы: docs/data-quality.md, profiling/etl-{verification,fixture}.jsonl, profiling/contract-facts.jsonl; инструкции в profiling/README.md.
+Следующий шаг: PR B → A подключает файл и фиксирует v1 → C выполняет запросы → D независимо проверяет сборку.
