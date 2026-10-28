@@ -1,0 +1,71 @@
+{
+  "status": "preview, not integrated build verification",
+  "checks": {
+    "q1_months": true,
+    "q1_zero_month": true,
+    "q1_total": true,
+    "q2_leader": true,
+    "q3_average": true,
+    "q3_complete": true,
+    "q4_customers": true,
+    "q4_repeat_pct": true,
+    "q5_categories": true,
+    "q5_leader": true,
+    "q5_total": true,
+    "category_total_matches_months": true
+  },
+  "core_counts": {
+    "customers": 96096,
+    "orders": 99441,
+    "order_items": 112650,
+    "order_payments": 103886,
+    "order_reviews": 99224,
+    "products": 32951,
+    "sellers": 3095,
+    "categories": 73,
+    "calendar": 821,
+    "etl_rejects": 0
+  },
+  "q1_total": "13221498.11",
+  "q2_leader": [
+    "4869f7a5dfa277a7dca6462dcf3b52b2",
+    "guariba",
+    "SP",
+    1124,
+    1148,
+    "226987.93"
+  ],
+  "q3": [
+    "159.88",
+    "1.142",
+    "1.142",
+    96478,
+    0
+  ],
+  "q4": [
+    96096,
+    2997,
+    "3.12"
+  ],
+  "q5_leader": [
+    "beleza_saude",
+    "health_beauty",
+    "1233131.72",
+    "9.33"
+  ],
+  "q5_total": "13221498.11",
+  "source_commit": "981d8590fc834e7592ee1086f395344f64c43467",
+  "build_difference": "Only in isolated scratch copy: add \\ir 20_load_core.sql after \\ir 10_ddl.sql. Main build does not yet include ETL.",
+  "contract_status": "v1 columns compatible; B text normalization/reject codes not yet aligned",
+  "input_manifest": "profiling/source-manifest.json",
+  "input_manifest_matches_all_8_files": true,
+  "sql_sha256": {
+    "model/10_ddl.sql": "cc65f376393f1c2c6e2ed69401a631884f93ead16738d3fe6f2bc58b876435bd",
+    "model/20_load_core.sql": "61abb81ff97ababa001430309084399437d91a5050ca8c5dd4976fcfff657b67",
+    "queries/01_monthly_revenue.sql": "fd6f7fb9526bd13aa61b53566cfae0476caad0eb683abecb5fbf4907d20ce0bc",
+    "queries/02_top_sellers.sql": "c669fcd45112897180d173b4943d7fa7298d950a5ba3eee62f6d547657c35be8",
+    "queries/03_average_order.sql": "fabafb5faa3a93c08985530a972ac3390035257099878a7ddd91fc98fc1600df",
+    "queries/04_repeat_customers.sql": "443c10ccacc499f3848b99ec0976b7b843682af677e8925121e75f5e94a47da5",
+    "queries/05_category_revenue.sql": "ed36d99f8fd19447ab1ca0aa6a4406746b69e2677c33cd590e63d39e25773245"
+  }
+}
