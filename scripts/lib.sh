@@ -23,7 +23,10 @@ fi
 db_up() {
   local out
   out=$($DC up -d postgres 2>&1) \
-    || die "не удалось запустить postgres" "$out"
+    || die "не удалось запустить postgres" "$out
+
+Порт занят другой базой (например, второй копией репозитория)?
+Задайте свой:  echo PG_PORT=5433 > .env  и выполните  bash scripts/setup.sh"
   for _ in $(seq 1 60); do
     $DC exec -T postgres pg_isready -U hack -d marketplace >/dev/null 2>&1 && break
     sleep 1

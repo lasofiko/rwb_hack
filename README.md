@@ -41,7 +41,7 @@ bash scripts/check.sh    # обязательные инварианты и от
 docker compose exec -T postgres psql -X -U hack -d marketplace -f /work/queries/01_monthly_revenue.sql
 ```
 
-Подключение: `postgresql://hack:hack@localhost:5432/marketplace` (логин и пароль
+Подключение: `postgresql://hack:hack@localhost:5432/marketplace` (порт — `PG_PORT` из `.env`, если задан; логин и пароль
 простые намеренно, база локальная). Локальный psql не нужен: скрипты запускают его
 внутри контейнера, репозиторий смонтирован туда как `/work` (только чтение).
 
@@ -52,8 +52,11 @@ docker compose exec -T postgres psql -X -U hack -d marketplace -f /work/queries/
 
 - **Схем raw/core/mart нет.** База создана раньше, init-скрипты не выполнились:
   `bash scripts/setup.sh --reset`. Это сносит базу целиком и проверкой модели не является.
-- **Порт 5432 занят.** Поменять проброс в `docker-compose.yml` на `"5433:5432"`
-  и выполнить `bash scripts/setup.sh --reset`.
+- **Порт 5432 занят или это вторая копия репозитория** (worktree, другая папка).
+  У каждой копии свой контейнер и своя база. Задать свой порт и загрузить в неё raw:
+  `echo PG_PORT=5433 > .env`, затем `bash scripts/setup.sh`. Дальше `build.sh` и `check.sh` как обычно.
+- **`$'\r': command not found` или `pipefail\r`.** Скрипты получили переносы строк Windows.
+  `.gitattributes` требует LF для `*.sh`; перевыгрузить их: `rm scripts/*.sh && git checkout -- scripts/`.
 - **`ModuleNotFoundError: psycopg2`.** `pip install psycopg2-binary`.
 - **Веб-клиент.** `docker compose --profile tools up -d`, затем http://localhost:8080.
 
