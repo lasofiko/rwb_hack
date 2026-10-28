@@ -1,5 +1,5 @@
 {
-  "status": "preview, not integrated build verification",
+  "status": "verified_full_data",
   "checks": {
     "q1_months": true,
     "q1_zero_month": true,
@@ -54,18 +54,24 @@
     "9.33"
   ],
   "q5_total": "13221498.11",
-  "source_commit": "981d8590fc834e7592ee1086f395344f64c43467",
-  "build_difference": "Only in isolated scratch copy: add \\ir 20_load_core.sql after \\ir 10_ddl.sql. Main build does not yet include ETL.",
-  "contract_status": "v1 columns compatible; B text normalization/reject codes not yet aligned",
+  "source_commit": "109c9a96dca64491b28e2eacf964a55f271afc81",
   "input_manifest": "profiling/source-manifest.json",
   "input_manifest_matches_all_8_files": true,
   "sql_sha256": {
-    "model/10_ddl.sql": "cc65f376393f1c2c6e2ed69401a631884f93ead16738d3fe6f2bc58b876435bd",
+    "model/build.sql": "59c390e28d89f0a14af3654f52b1cb44920344ac691bf46f01edb5627cb4b569",
+    "model/10_ddl.sql": "14573e6357ee8f033fe518062f838ef994811a8d4d0cea00f0b31351bf1d07d4",
     "model/20_load_core.sql": "61abb81ff97ababa001430309084399437d91a5050ca8c5dd4976fcfff657b67",
     "queries/01_monthly_revenue.sql": "fd6f7fb9526bd13aa61b53566cfae0476caad0eb683abecb5fbf4907d20ce0bc",
     "queries/02_top_sellers.sql": "c669fcd45112897180d173b4943d7fa7298d950a5ba3eee62f6d547657c35be8",
     "queries/03_average_order.sql": "fabafb5faa3a93c08985530a972ac3390035257099878a7ddd91fc98fc1600df",
     "queries/04_repeat_customers.sql": "443c10ccacc499f3848b99ec0976b7b843682af677e8925121e75f5e94a47da5",
     "queries/05_category_revenue.sql": "ed36d99f8fd19447ab1ca0aa6a4406746b69e2677c33cd590e63d39e25773245"
-  }
+  },
+  "contract_version": "1.1",
+  "standard_build_command": "bash scripts/build.sh",
+  "successful_standard_builds": 2,
+  "csv_identical_between_builds": true,
+  "psql_csv_export_command_verified": true,
+  "operational_overrides": "Isolated compose project/volume/container and port 55448; source SQL unchanged.",
+  "postgres_version": "16.14"
 }
