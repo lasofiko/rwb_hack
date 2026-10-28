@@ -1,0 +1,50 @@
+﻿[
+    {
+        "file":  "olist_orders_dataset.csv",
+        "url":  "https://raw.githubusercontent.com/olist/work-at-olist-data/master/datasets/olist_orders_dataset.csv",
+        "sha256":  "8DF58EF3D2D7E9944010F7BEECD9B75367F5588EC6E3C91CEC19AE3345EF9ECF",
+        "bytes":  17654914
+    },
+    {
+        "file":  "olist_order_items_dataset.csv",
+        "url":  "https://raw.githubusercontent.com/olist/work-at-olist-data/master/datasets/olist_order_items_dataset.csv",
+        "sha256":  "4F6ABDBBC94036D0DF4A76FA0520C072E31A40119D70F7F370FBA1E2285D2BCB",
+        "bytes":  15007623
+    },
+    {
+        "file":  "olist_order_payments_dataset.csv",
+        "url":  "https://raw.githubusercontent.com/olist/work-at-olist-data/master/datasets/olist_order_payments_dataset.csv",
+        "sha256":  "61674868ED7B872AAC3DCD95BF774448A88F6426B183F21BE55F75AF021FFDEC",
+        "bytes":  5647783
+    },
+    {
+        "file":  "olist_order_reviews_dataset.csv",
+        "url":  "https://raw.githubusercontent.com/olist/work-at-olist-data/master/datasets/olist_order_reviews_dataset.csv",
+        "sha256":  "012B61C7593E34F51FA614EFDF802B9C7056CE6AAE5307DDB93236E7CFC797D7",
+        "bytes":  14451670
+    },
+    {
+        "file":  "olist_products_dataset.csv",
+        "url":  "https://raw.githubusercontent.com/olist/work-at-olist-data/master/datasets/olist_products_dataset.csv",
+        "sha256":  "3E6569628A17FBC75FD206EE357B59E20364B9AFA90F5B6CD5B4D624C58AA9CC",
+        "bytes":  2379446
+    },
+    {
+        "file":  "olist_sellers_dataset.csv",
+        "url":  "https://raw.githubusercontent.com/olist/work-at-olist-data/master/datasets/olist_sellers_dataset.csv",
+        "sha256":  "31EB9BD50D684526A78F2389413CE61841E97692DE7B828FE7D956B534586312",
+        "bytes":  163589
+    },
+    {
+        "file":  "olist_customers_dataset.csv",
+        "url":  "https://raw.githubusercontent.com/olist/work-at-olist-data/master/datasets/olist_customers_dataset.csv",
+        "sha256":  "C26C17F59F3027A6A0DBEB8F1FA373C38F3323ECC84F225A8F4820E5BB288DF8",
+        "bytes":  8562270
+    },
+    {
+        "file":  "product_category_name_translation.csv",
+        "url":  "https://raw.githubusercontent.com/olist/work-at-olist-data/master/datasets/product_category_name_translation.csv",
+        "sha256":  "A81F0D1F27B27E7293F761BC79E3CE8F348EE39C4B3ED3E49BDE38F478586278",
+        "bytes":  2613
+    }
+]

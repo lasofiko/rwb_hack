@@ -1,0 +1,21 @@
+﻿services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: hack
+      POSTGRES_PASSWORD: hack
+      POSTGRES_DB: marketplace_b
+      POSTGRES_INITDB_ARGS: --encoding=UTF8 --locale=C
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./local:/workspace:ro
+      - ./:/profiling:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U hack -d marketplace_b"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+volumes:
+  pgdata:
