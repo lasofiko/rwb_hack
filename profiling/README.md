@@ -47,3 +47,9 @@ raw-таблицах и право TEMP в БД. Вывод — JSONL с агр�
 numeric/integer): `./profiling/followup.ps1` или
 `psql "$DATABASE_URL" -X -q -v ON_ERROR_STOP=1 -f profiling/02_followup.sql`.
 Результат — `followup.jsonl`; запрос не повторяет полный профиль.
+
+Разложение разницы payment−(price+freight) по заказам и статусам:
+`./profiling/reconcile.ps1`; SQL `03_reconciliation.sql`, результат
+`reconciliation.jsonl`. Запускать после успешного профиля типов numeric.
+Он сохраняет отсутствие дочернего набора как NULL и агрегирует каждый набор
+до заказа перед JOIN; это точечная сверка источников, а не повторный полный профиль.
