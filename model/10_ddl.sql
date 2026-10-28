@@ -4,8 +4,8 @@
 --
 -- Имена колонок как в raw (кроме опечатки lenght в products), типы — настоящие.
 -- Деньги numeric без typmod: не округлять молча. Время — timestamp без пояса,
--- как в источнике. Пустая или пробельная строка = NULL, непустой текст отзыва —
--- байт в байт. NULL = «неизвестно»; метка unknown появляется только в mart и ответах.
+-- как в источнике. Тексты — как в источнике, без trim. NULL = «неизвестно»;
+-- метка unknown появляется только в mart и ответах.
 
 -- Покупатель-человек. В raw.customers одна строка на заказ (customer_id),
 -- поэтому человек — это customer_unique_id. Адрес хранится в заказе.
@@ -87,7 +87,7 @@ CREATE TABLE core.order_reviews (
     review_id               text     NOT NULL,
     order_id                text     NOT NULL REFERENCES core.orders,
     review_score            smallint NOT NULL CHECK (review_score BETWEEN 1 AND 5),
-    review_comment_title    text,  -- непустой — байт в байт с пробелами по краям; пробельный = NULL
+    review_comment_title    text,  -- текст байт в байт, пробелы по краям значимы
     review_comment_message  text,
     review_creation_date    timestamp,
     review_answer_timestamp timestamp,
@@ -107,7 +107,7 @@ CREATE TABLE core.calendar (
 CREATE TABLE core.etl_rejects (
     source_table text  NOT NULL,  -- имя таблицы в raw без схемы
     source_key   text,            -- ключ строки в источнике, если есть
-    reason       text  NOT NULL,  -- коды из docs/contract.md через ';': bad_type:<колонка>, orphan_fk:<таблица>, ...
+    reason       text  NOT NULL,  -- код из docs/contract.md: bad_type:<колонка>, orphan:<таблица>, ...
     payload      jsonb NOT NULL   -- исходная строка целиком: to_jsonb(r)
 );
 
