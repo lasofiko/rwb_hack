@@ -8,6 +8,10 @@ WITH anomalies AS (
     WHERE NOT EXISTS (SELECT 1 FROM core.order_payments p WHERE p.order_id = o.order_id)
     UNION ALL SELECT 'approval_before_purchase', order_id FROM core.orders
     WHERE order_approved_at < order_purchase_timestamp
+    UNION ALL SELECT 'carrier_before_purchase', order_id FROM core.orders
+    WHERE order_delivered_carrier_date < order_purchase_timestamp
+    UNION ALL SELECT 'carrier_before_approval', order_id FROM core.orders
+    WHERE order_delivered_carrier_date < order_approved_at
     UNION ALL SELECT 'delivery_before_carrier', order_id FROM core.orders
     WHERE order_delivered_customer_date < order_delivered_carrier_date
 ), ranked AS (

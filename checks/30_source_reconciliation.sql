@@ -60,8 +60,8 @@ BEGIN
     $dst$),
     ('order_reviews', $src$
         SELECT nullif(btrim(review_id), ''), nullif(btrim(order_id), ''),
-            nullif(btrim(review_score), '')::smallint, nullif(btrim(review_comment_title), ''),
-            nullif(btrim(review_comment_message), ''), nullif(btrim(review_creation_date), '')::timestamp,
+            nullif(btrim(review_score), '')::smallint, review_comment_title,
+            review_comment_message, nullif(btrim(review_creation_date), '')::timestamp,
             nullif(btrim(review_answer_timestamp), '')::timestamp FROM pg_temp.d_accepted_order_reviews
     $src$, $dst$
         SELECT review_id, order_id, review_score, review_comment_title, review_comment_message,
