@@ -8,6 +8,17 @@ commit `3da32d149bfa14dca3fdb0c5863d0771c38efbfc`, перенесён без `.g
 Данные — Brazilian E-Commerce Public Dataset by Olist, лицензия CC BY-NC-SA 4.0
 (см. `docs/handout.md`, раздел «Источник»).
 
+## Команды
+
+```bash
+bash scripts/setup.sh    # окружение и raw, один раз
+bash scripts/build.sh    # core и mart с нуля из raw, одна транзакция
+bash scripts/check.sh    # инварианты checks/ и отчёт по аномалиям
+```
+
+Модель: [docs/contract.md](docs/contract.md). Локальный psql не нужен — скрипты
+запускают его внутри контейнера.
+
 Ниже — README раздатки (только заголовок понижен на уровень).
 
 ---
