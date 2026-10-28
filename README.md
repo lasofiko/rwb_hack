@@ -316,8 +316,17 @@ docker compose exec -T -w /work postgres psql -X -q -v ON_ERROR_STOP=1 -U hack -
   -c 'BEGIN ISOLATION LEVEL REPEATABLE READ' -f checks/baseline/01_raw_baseline.sql -f checks/baseline/02_core_v1.sql -c 'ROLLBACK'
 ```
 
-Синтетические проверки самих проверок — `python checks/tools/smoke_checks.py --container <контейнер>`
-в отдельном временном контейнере с пустой базой `d_checks_fixture`: 11 из 11.
+Проверки самих проверок — в отдельном временном контейнере PostgreSQL 16 (имя `rwb-d-quality-*`,
+репозиторий смонтирован в `/work`) с пустой базой `d_checks_fixture`. Каждый сценарий
+откатывается, штатный raw не затрагивается:
+
+```bash
+python checks/tools/smoke_checks.py --container CONTAINER_NAME              # синтетика: 11 из 11
+python checks/tools/smoke_checks.py --container CONTAINER_NAME --probe-etl  # загрузка B 20_1..20_4 на синтетике: PASS
+```
+
+Синтетика ловит обрезку пробелов, округление денег, FK-сироту, дыру в календаре
+и неверный карантин.
 
 ## Записка о решениях
 
@@ -397,6 +406,7 @@ MVP — PostgreSQL 16, неизменяемый raw, core и витрины; т�
 | raw не меняется | после сборок 99 441 заказ и 112 650 позиций, как при загрузке |
 | Контрольные цифры | Q1–Q5 совпали; запросы прошли тесты на синтетике |
 | Проверки | `check.sh` на main `5d60a47`: 6 из 6 |
+| Независимая проверка D | своя база, PostgreSQL 16.14: 8 из 8 CSV совпали по размеру и SHA-256 с `profiling/source-manifest.json`; 6 обязательных проверок, 3 отчёта и 2 baseline прошли; все пять ответов совпали с CSV C |
 
 ## Защита за 3 минуты
 

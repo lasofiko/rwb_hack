@@ -45,7 +45,9 @@ def main():
     if args.probe_etl:
         mutation = (
             "DROP SCHEMA core CASCADE;\nCREATE SCHEMA core;\n"
-            "\\ir /work/model/10_ddl.sql\n\\ir /work/model/20_load_core.sql\n"
+            "\\ir /work/model/10_ddl.sql\n"
+            "\\ir /work/model/20_1_dims.sql\n\\ir /work/model/20_2_orders.sql\n"
+            "\\ir /work/model/20_3_order_children.sql\n\\ir /work/model/20_4_calendar.sql\n"
         )
         passed = run_case(args.container, "current B ETL vs v1", ["30_source_reconciliation.sql"], mutation)
         print("This is a synthetic integration probe; real input data NOT tested.")
